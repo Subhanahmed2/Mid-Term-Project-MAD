@@ -9,16 +9,22 @@ class _AboutPageState extends State<AboutPage> {
   int _selectedIndex = 2;
 
   void _onItemTapped(int index) {
+    // ✅ Prevent reopening the same tab
+    if (index == _selectedIndex) return;
+
     setState(() {
       _selectedIndex = index;
     });
 
     if (index == 0) {
-      Navigator.pushNamed(context, '/');
+      // Navigate to Home and clear previous routes
+      Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
     } else if (index == 1) {
-      Navigator.pushNamed(context, '/menu');
+      // Navigate to Menu and clear previous routes
+      Navigator.pushNamedAndRemoveUntil(context, '/menu', (route) => false);
     } else if (index == 2) {
-      Navigator.pushNamed(context, '/about');
+      // Already on About page — do nothing
+      return;
     }
   }
 
@@ -52,7 +58,7 @@ class _AboutPageState extends State<AboutPage> {
               Center(
                 child: ElevatedButton.icon(
                   onPressed: () {
-                    Navigator.pushNamed(context, '/');
+                    Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
                   },
                   icon: const Icon(Icons.home),
                   label: const Text('Back to Home'),
@@ -70,20 +76,10 @@ class _AboutPageState extends State<AboutPage> {
         selectedItemColor: Colors.deepOrange,
         unselectedItemColor: Colors.grey,
         onTap: _onItemTapped,
-        // ✅ No const keyword at list level; only inside items
-        items: [
-          BottomNavigationBarItem(
-            icon: const Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: const Icon(Icons.restaurant_menu),
-            label: 'Menu',
-          ),
-          BottomNavigationBarItem(
-            icon: const Icon(Icons.info),
-            label: 'About',
-          ),
+        items: const [
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+          BottomNavigationBarItem(icon: Icon(Icons.restaurant_menu), label: 'Menu'),
+          BottomNavigationBarItem(icon: Icon(Icons.info), label: 'About'),
         ],
       ),
     );

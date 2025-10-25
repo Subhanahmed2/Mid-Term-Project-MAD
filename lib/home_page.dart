@@ -20,12 +20,16 @@ class _HomePageState extends State<HomePage> {
   ];
 
   void _onItemTapped(int index) {
+    // Prevent reopening the same tab
+    if (index == _selectedIndex) return;
+
     setState(() {
       _selectedIndex = index;
     });
 
     if (index == 0) {
-      Navigator.pushNamed(context, '/');
+      // Go back to home if user was on another page
+      Navigator.popUntil(context, ModalRoute.withName('/'));
     } else if (index == 1) {
       Navigator.pushNamed(context, '/menu');
     } else if (index == 2) {
@@ -78,8 +82,7 @@ class _HomePageState extends State<HomePage> {
               label: const Text('View Menu'),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.deepOrange,
-                padding:
-                const EdgeInsets.symmetric(horizontal: 25, vertical: 12),
+                padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 12),
                 textStyle: const TextStyle(fontSize: 18),
               ),
             ),
@@ -111,7 +114,7 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
-  TextEditingController _searchController = TextEditingController();
+  final TextEditingController _searchController = TextEditingController();
   List<Map<String, String>> _filteredFoods = [];
 
   @override

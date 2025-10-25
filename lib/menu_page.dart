@@ -16,27 +16,32 @@ class _MenuPageState extends State<MenuPage> {
     {'name': 'Hot Dog', 'price': '\$3.20', 'image': 'assets/images/hotdog.jpg'},
     {'name': 'Ice Cream Cup', 'price': '\$2.50', 'image': 'assets/images/icecream.jpg'},
     {'name': 'Fresh Salad', 'price': '\$3.10', 'image': 'assets/images/salad.jpg'},
-    {'name': 'Donut', 'price': '\$1.99', 'image': 'assets/images/donut.jpg'},
+    
   ];
 
   void _onItemTapped(int index) {
+    // ✅ Prevent reopening the same tab
+    if (index == _selectedIndex) return;
+
     setState(() {
       _selectedIndex = index;
     });
 
     if (index == 0) {
-      Navigator.pushNamed(context, '/');
+      // Go back to home
+      Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
     } else if (index == 1) {
-      Navigator.pushNamed(context, '/menu');
+      // Already on Menu page — do nothing
+      return;
     } else if (index == 2) {
-      Navigator.pushNamed(context, '/about');
+      Navigator.pushNamedAndRemoveUntil(context, '/about', (route) => false);
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFFFF3E0), // soft solid background
+      backgroundColor: const Color(0xFFFFF3E0),
       appBar: AppBar(
         title: const Text('🍟 Our Delicious Menu'),
         backgroundColor: Colors.deepOrange,
